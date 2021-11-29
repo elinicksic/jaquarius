@@ -1,0 +1,29 @@
+{
+  "name": "jaquarius-bot",
+  "version": "1.0.0",
+  "description": "Jaquarius is a helpful Discord bot for The Gaming Exploders",
+  "main": "dist/index",
+  "author": "Eli Nicksic",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon src/index.ts",
+    "build": "tsc",
+    "start": "node ."
+  },
+  "dependencies": {
+    "discord.js": "^13.3.1",
+    "dotenv": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.10",
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
+    "eslint": "^8.3.0",
+    "nodemon": "^2.0.15",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.2"
+  },
+  "engines": {
+    "node": ">=16.13.0"
+  }
+}
