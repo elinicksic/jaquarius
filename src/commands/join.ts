@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { DiscordGatewayAdapterCreator, joinVoiceChannel } from "@discordjs/voice";
-import { Client, CommandInteraction, CacheType, GuildMember, VoiceChannel } from "discord.js";
+import { Client, CommandInteraction, GuildMember } from "discord.js";
 import Command from "../command";
 
 class Join extends Command {
