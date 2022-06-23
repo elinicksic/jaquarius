@@ -9,10 +9,10 @@ export class SkipCommand extends Command {
     .setDescription("Skip the currently playing song");
   execute(client: Bot, interaction: CommandInteraction): void {
     if (interaction.guildId == null) {
-      interaction.reply("This can only be ran in a guild :(")
+      interaction.reply("This can only be ran in a guild :(");
       return;
     }
-    
+
     const queue = client.queues.get(interaction.guildId);
     if (!queue) {
       interaction.reply("There is no queue!");
@@ -21,5 +21,4 @@ export class SkipCommand extends Command {
     queue.next();
     interaction.reply("Skipped!");
   }
-
 }

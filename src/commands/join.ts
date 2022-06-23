@@ -1,5 +1,8 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { DiscordGatewayAdapterCreator, joinVoiceChannel } from "@discordjs/voice";
+import {
+  DiscordGatewayAdapterCreator,
+  joinVoiceChannel,
+} from "@discordjs/voice";
 import { Client, CommandInteraction, GuildMember } from "discord.js";
 import Command from "../command";
 
@@ -14,7 +17,12 @@ class Join extends Command {
       interaction.reply("You are not in a voice channel!");
       return;
     }
-    joinVoiceChannel({channelId: channel?.id, guildId: channel.guildId, adapterCreator: channel.guild.voiceAdapterCreator as DiscordGatewayAdapterCreator});
+    joinVoiceChannel({
+      channelId: channel?.id,
+      guildId: channel.guildId,
+      adapterCreator: channel.guild
+        .voiceAdapterCreator as DiscordGatewayAdapterCreator,
+    });
     interaction.reply(`Okay, I joined your channel!`);
   }
 }

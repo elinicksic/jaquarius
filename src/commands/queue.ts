@@ -9,7 +9,7 @@ export class QueueCommand extends Command {
     .setDescription("Lists the contents of the queue.");
   execute(client: Bot, interaction: CommandInteraction): void {
     if (interaction.guildId == null) {
-      interaction.reply("This can only be ran in a guild :(")
+      interaction.reply("This can only be ran in a guild :(");
       return;
     }
 

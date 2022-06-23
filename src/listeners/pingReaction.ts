@@ -6,17 +6,20 @@ module.exports = {
       name: "messageCreate",
       once: false,
       execute(message: Message) {
-        if (!message.mentions.users.has(message.client.user?.id || "") && !message.content.toLowerCase().includes("jaquarius")) {
+        if (
+          !message.mentions.users.has(message.client.user?.id || "") &&
+          !message.content.toLowerCase().includes("jaquarius")
+        ) {
           return;
         }
-  
+
         const emoji = message.client.emojis.cache.random();
         if (!emoji) {
           return;
         }
-  
-        message.react(emoji)
-      }
-    }
-  ]
-}
+
+        message.react(emoji);
+      },
+    },
+  ],
+};

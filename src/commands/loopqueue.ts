@@ -9,7 +9,7 @@ export class LoopQueueCommand extends Command {
     .setDescription("Loops the queue.");
   execute(client: Bot, interaction: CommandInteraction): void {
     if (interaction.guildId == null) {
-      interaction.reply("This can only be ran in a guild :(")
+      interaction.reply("This can only be ran in a guild :(");
       return;
     }
     const queue = client.queues.get(interaction.guildId);
@@ -19,7 +19,8 @@ export class LoopQueueCommand extends Command {
     }
 
     queue.isQueueLooped = !queue.isQueueLooped;
-    interaction.reply(queue.isQueueLooped ? "Looping the queue..." : "No longer looping queue.");
+    interaction.reply(
+      queue.isQueueLooped ? "Looping the queue..." : "No longer looping queue."
+    );
   }
-
 }

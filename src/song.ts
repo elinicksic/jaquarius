@@ -6,4 +6,4 @@ export type Song = {
   addedTime: number;
   length: number;
   title: string;
-}
+};

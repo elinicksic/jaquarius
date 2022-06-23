@@ -9,7 +9,7 @@ export class NowPlayingCommand extends Command {
     .setDescription("Tells you what is currently playing.");
   execute(client: Bot, interaction: CommandInteraction): void {
     if (interaction.guildId == null) {
-      interaction.reply("This can only be ran in a guild :(")
+      interaction.reply("This can only be ran in a guild :(");
       return;
     }
     const queue = client.queues.get(interaction.guildId);
@@ -24,11 +24,19 @@ export class NowPlayingCommand extends Command {
       return;
     }
     // ${Date.now() - (queue.startTime + song.length)}
-    const timeRemaining = (queue.startTime + song.length * 1000) - Date.now();
-    interaction.reply(`Currently playing${queue.isLooped ? " (LOOPED)" : ""}\n*${song.title}*\nIt is ${Math.floor(song.length/60)}:${this.padNumber(song.length%60)} long with ${Math.floor(timeRemaining / 60000)}:${this.padNumber(Math.floor(timeRemaining / 1000) % 60)} remaining.`);
+    const timeRemaining = queue.startTime + song.length * 1000 - Date.now();
+    interaction.reply(
+      `Currently playing${queue.isLooped ? " (LOOPED)" : ""}\n*${
+        song.title
+      }*\nIt is ${Math.floor(song.length / 60)}:${this.padNumber(
+        song.length % 60
+      )} long with ${Math.floor(timeRemaining / 60000)}:${this.padNumber(
+        Math.floor(timeRemaining / 1000) % 60
+      )} remaining.`
+    );
   }
 
   padNumber(num: number) {
-    return (num < 10 ? '0' : '') + num;
+    return (num < 10 ? "0" : "") + num;
   }
 }

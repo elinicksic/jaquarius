@@ -1,7 +1,12 @@
-import { AudioPlayer, AudioPlayerStatus, createAudioResource, StreamType } from "@discordjs/voice";
+import {
+  AudioPlayer,
+  AudioPlayerStatus,
+  createAudioResource,
+  StreamType,
+} from "@discordjs/voice";
 import { exec } from "youtube-dl-exec";
 import { Song } from "./song";
-import youtubedl from 'youtube-dl-exec';
+import youtubedl from "youtube-dl-exec";
 import { User } from "discord.js";
 
 export class Queue {
@@ -35,10 +40,12 @@ export class Queue {
 
     if (this.isQueueLooped && !this.isLooped) this.queue.push(nextSong);
 
-    const subprocess = exec(nextSong.link, {format: "251", output: "-"});
+    const subprocess = exec(nextSong.link, { format: "251", output: "-" });
 
     if (subprocess.stdout !== null) {
-      const resource = createAudioResource(subprocess.stdout, {inputType: StreamType.WebmOpus});
+      const resource = createAudioResource(subprocess.stdout, {
+        inputType: StreamType.WebmOpus,
+      });
       this.player.play(resource);
       this.currentSong = nextSong;
       this.startTime = Date.now();
@@ -47,23 +54,23 @@ export class Queue {
 
   add(query: string, user: User) {
     youtubedl(query, {
-      skipDownload: true, 
-      dumpSingleJson: true, 
-      defaultSearch: "ytsearch"
-    }).then(output => {
+      skipDownload: true,
+      dumpSingleJson: true,
+      defaultSearch: "ytsearch",
+    }).then((output) => {
       const song: Song = {
         link: output.webpage_url,
         user: user,
         addedTime: Date.now(),
         length: output.duration,
-        title: output.title
-      }
+        title: output.title,
+      };
 
       if (song.title.toLowerCase().includes("super idol")) {
         return;
       }
-  
+
       this.queue.push(song);
-    })
+    });
   }
 }
