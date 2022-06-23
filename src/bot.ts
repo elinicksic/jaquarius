@@ -67,10 +67,10 @@ class Bot extends Client {
       return;
     }
 
-    if (!this.config.RADIO_CHANNEL_ID) {
-      console.log("Please specify a Client ID .env!");
-      return;
-    }
+//     if (!this.config.RADIO_CHANNEL_ID) {
+//       console.log("Please specify a Client ID .env!");
+//       return;
+//     }
 
     // Register commands
     this.registerCommand(new Ping());
