@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { REST } from "@discordjs/rest";
 import {
   createAudioPlayer,
@@ -66,6 +67,11 @@ class Bot extends Client {
       return;
     }
 
+    if (!this.config.RADIO_CHANNEL_ID) {
+      console.log("Please specify a Client ID .env!");
+      return;
+    }
+
     // Register commands
     this.registerCommand(new Ping());
     this.registerCommand(new Join());
@@ -103,8 +109,8 @@ class Bot extends Client {
 
   private async registerListeners() {
     const listenersPath = path.join(__dirname, "listeners");
-    const listenerFiles = readdirSync(listenersPath).filter((file) =>
-      file.endsWith(".js")
+    const listenerFiles = readdirSync(listenersPath).filter(
+      (file) => file.endsWith(".js") || file.endsWith(".ts")
     );
 
     for (const file of listenerFiles) {
