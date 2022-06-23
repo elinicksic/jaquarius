@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { REST } from "@discordjs/rest";
 import {
   createAudioPlayer,
@@ -62,6 +63,11 @@ class Bot extends Client {
     }
 
     if (!this.config.CLIENT_ID) {
+      console.log("Please specify a Client ID .env!");
+      return;
+    }
+
+    if (!this.config.RADIO_CHANNEL_ID) {
       console.log("Please specify a Client ID .env!");
       return;
     }
