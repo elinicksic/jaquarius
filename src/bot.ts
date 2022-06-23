@@ -109,8 +109,8 @@ class Bot extends Client {
 
   private async registerListeners() {
     const listenersPath = path.join(__dirname, "listeners");
-    const listenerFiles = readdirSync(listenersPath).filter((file) =>
-      file.endsWith(".js")
+    const listenerFiles = readdirSync(listenersPath).filter(
+      (file) => file.endsWith(".js") || file.endsWith(".ts")
     );
 
     for (const file of listenerFiles) {
