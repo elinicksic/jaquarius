@@ -8,6 +8,11 @@ export class QueueCommand extends Command {
     .setName("queue")
     .setDescription("Lists the contents of the queue.");
   execute(client: Bot, interaction: CommandInteraction): void {
+    if (interaction.guildId == null) {
+      interaction.reply("This can only be ran in a guild :(")
+      return;
+    }
+
     const queue = client.queues.get(interaction.guildId);
     if (!queue) {
       interaction.reply("There is no queue. Why not start one with /play?");

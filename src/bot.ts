@@ -1,8 +1,10 @@
 import { REST } from "@discordjs/rest";
 import { createAudioPlayer, DiscordGatewayAdapterCreator, joinVoiceChannel } from "@discordjs/voice";
 import { Routes } from "discord-api-types/v9";
-import { Client, Collection, Intents, Interaction, Snowflake, VoiceChannel } from "discord.js";
+import { Client, Collection, Interaction, Snowflake, VoiceChannel } from "discord.js";
 import 'dotenv/config';
+import { readdirSync } from "fs";
+import path from "path";
 import Command from "./command";
 import Join from "./commands/join";
 import { LoopCommand } from "./commands/loop";
@@ -20,7 +22,12 @@ class Bot extends Client {
   public queues: Collection<Snowflake, Queue> = new Collection();
 
   public constructor() {
-    super({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES]});
+    super({ intents: [
+      "GUILDS", 
+      "GUILD_VOICE_STATES", 
+      "GUILD_MESSAGES", 
+      "GUILD_MESSAGE_TYPING",
+    ]});
   }
 
   public async init() {
@@ -57,11 +64,10 @@ class Bot extends Client {
     this.registerCommand(new LoopCommand());
     this.registerCommand(new LoopQueueCommand());
     
-    const commandRegister: any[] = []; 
+    const commandRegister: unknown[] = []; 
 
     this.commands.forEach((command: Command) => {
       commandRegister.push(command.data.toJSON());
-      console.log(`Registered command: ${command.data.toJSON}`);
     });
 
     const rest = new REST({ version: '9' }).setToken(this.config.DISCORD_API_KEY);
@@ -70,6 +76,32 @@ class Bot extends Client {
       Routes.applicationGuildCommands(this.config.CLIENT_ID, this.config.GUILD_ID),
       { body: commandRegister }
     );
+
+    this.on("ready", (client) => {
+      console.log("Logged in as " + client.user.tag)
+    });
+
+    await this.registerListeners()
+  }
+
+  private async registerListeners() {
+    const listenersPath = path.join(__dirname, "listeners");
+    const listenerFiles = readdirSync(listenersPath).filter(file => file.endsWith(".js"));
+
+    for (const file of listenerFiles) {
+      const filePath = path.join(listenersPath, file);
+      const command = await import(filePath);
+
+      const events = command.events;
+
+      for (const event of events) {
+        if (event.once) {
+          this.once(event.name, event.execute);
+        } else {
+          this.on(event.name, event.execute);
+        }
+      }
+    }
   }
 
   private registerCommand(command: Command) {

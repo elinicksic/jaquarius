@@ -1,6 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { time } from "console";
-import { Client, CommandInteraction, CacheType } from "discord.js";
+import { CommandInteraction } from "discord.js";
 import Bot from "../bot";
 import Command from "../command";
 
@@ -9,6 +8,10 @@ export class NowPlayingCommand extends Command {
     .setName("nowplaying")
     .setDescription("Tells you what is currently playing.");
   execute(client: Bot, interaction: CommandInteraction): void {
+    if (interaction.guildId == null) {
+      interaction.reply("This can only be ran in a guild :(")
+      return;
+    }
     const queue = client.queues.get(interaction.guildId);
     if (!queue) {
       interaction.reply("There is no queue!");

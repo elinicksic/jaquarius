@@ -19,6 +19,12 @@ class Play extends Command {
       interaction.reply("You are not in a voice channel!");
       return;
     }
+
+    if (interaction.guildId == null) {
+      interaction.reply("This can only be ran in a guild :(")
+      return;
+    }
+
     const queue = client.queues.has(interaction.guildId) ? client.queues.get(interaction.guildId) : client.createQueue(member.voice.channelId);
     if (!queue) {
       interaction.reply("Something went wrong!");
@@ -31,15 +37,19 @@ class Play extends Command {
       return;
     }    
 
-    youtubedl(url, {skipDownload: true, dumpSingleJson: true}).then(output => {
+    youtubedl(url, {
+      skipDownload: true, 
+      dumpSingleJson: true, 
+      defaultSearch: "ytsearch"
+    }).then(output => {
       const song: Song = {
-        link: url,
+        link: output.webpage_url,
         user: interaction.user,
         addedTime: Date.now(),
         length: output.duration,
         title: output.title
       }
-  
+
       queue.queue.push(song);
 
       if (queue.currentSong == null) {
@@ -47,9 +57,11 @@ class Play extends Command {
       }
 
       interaction.editReply(`Added ${output.title} to the queue!`);
+    }).catch(() => {
+      interaction.editReply("I can only play links to YouTube videos!")
     });
 
-    interaction.reply("Please wait...");
+    interaction.deferReply();
   }
 }
 
