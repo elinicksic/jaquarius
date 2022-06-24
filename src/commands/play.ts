@@ -76,7 +76,7 @@ class Play extends Command {
       })
       .catch((e) => {
         interaction.editReply("I can only play links to YouTube videos!");
-        // interaction.editReply(e.message);
+        interaction.editReply(e.message);
       });
 
     interaction.deferReply();
