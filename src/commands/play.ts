@@ -11,7 +11,7 @@ class Play extends Command {
     .setDescription("Plays a song from a link")
     .addStringOption((option) =>
       option
-        .setName("url") // I couldn't change this without the queue breaking
+        .setName("query")
         .setDescription("The URL or Search Query of the video you want to play")
         .setRequired(true)
     ) as SlashCommandBuilder;
@@ -35,28 +35,28 @@ class Play extends Command {
       return;
     }
 
-    const url = interaction.options.getString("url");
-    if (!url) {
+    const query = interaction.options.getString("query");
+    if (!query) {
       interaction.reply("Something went wrong!");
       return;
     }
 
-    youtubedl(url, {
+    youtubedl(query, {
       skipDownload: true,
       dumpSingleJson: true,
       defaultSearch: "ytsearch",
     })
       .then((output: any) => {
         // When you use /play <query> instead of providing a link it returns a playlist
-        const playlist = output._type === "playlist";
+        const isPlaylist = output._type === "playlist";
+        const result = isPlaylist ? output.entries[0] : output;
 
-        // If it is a playlist it uses the first entry
         const song: Song = {
-          link: playlist ? output.entries[0].webpage_url : output.webpage_url,
+          link: result.webpage_url,
           user: interaction.user,
           addedTime: Date.now(),
-          length: playlist ? output.entries[0].duration : output.duration,
-          title: playlist ? output.entries[0].title : output.title,
+          length: result.duration,
+          title: result.title,
         };
 
         queue.queue.push(song);
@@ -68,7 +68,7 @@ class Play extends Command {
         interaction.editReply(`Added ${song.title} to the queue!`);
       })
       .catch((e) => {
-        interaction.editReply("I can only play links to YouTube videos!");
+        interaction.editReply("Something went wrong finding your query!");
         interaction.editReply(e.message);
       });
 
