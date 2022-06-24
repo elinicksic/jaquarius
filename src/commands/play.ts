@@ -48,15 +48,22 @@ class Play extends Command {
     })
       .then((output: any) => {
         // When you use /play <query> instead of providing a link it returns a playlist
-        const playlist = output._type === "playlist" ? true : false;
-
         // If it is a playlist it uses the first entry
         const song: Song = {
-          link: playlist ? output.entries[0].webpage_url : output.webpage_url,
+          link:
+            output._type === "playlist"
+              ? output.entries[0].webpage_url
+              : output.webpage_url,
           user: interaction.user,
           addedTime: Date.now(),
-          length: playlist ? output.entries[0].duration : output.duration,
-          title: playlist ? output.entries[0].title : output.title,
+          length:
+            output._type === "playlist"
+              ? output.entries[0].duration
+              : output.duration,
+          title:
+            output._type === "playlist"
+              ? output.entries[0].title
+              : output.title,
         };
 
         queue.queue.push(song);
