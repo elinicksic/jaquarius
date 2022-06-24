@@ -25,6 +25,7 @@ import Ping from "./commands/ping";
 import Play from "./commands/play";
 import { QueueCommand } from "./commands/queue";
 import { SkipCommand } from "./commands/skip";
+import PlayNow from "./commands/playnow";
 import { Queue } from "./queue";
 
 class Bot extends Client {
@@ -67,10 +68,10 @@ class Bot extends Client {
       return;
     }
 
-//     if (!this.config.RADIO_CHANNEL_ID) {
-//       console.log("Please specify a Client ID .env!");
-//       return;
-//     }
+    //     if (!this.config.RADIO_CHANNEL_ID) {
+    //       console.log("Please specify a Client ID .env!");
+    //       return;
+    //     }
 
     // Register commands
     this.registerCommand(new Ping());
@@ -81,6 +82,7 @@ class Bot extends Client {
     this.registerCommand(new SkipCommand());
     this.registerCommand(new LoopCommand());
     this.registerCommand(new LoopQueueCommand());
+    this.registerCommand(new PlayNow());
 
     const commandRegister: unknown[] = [];
 
