@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { CommandInteraction, GuildMember } from "discord.js";
 import Command from "../command";
-import youtubedl from "youtube-dl-exec";
+import youtubedl, { YtResponse } from "youtube-dl-exec";
 import Bot from "../bot";
 import { Song } from "../song";
 
@@ -46,6 +46,9 @@ class Play extends Command {
       dumpSingleJson: true,
       defaultSearch: "ytsearch",
     })
+      // Problem with the youtube-dl library.
+      // _type and entries are not including in the types.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .then((output: any) => {
         // When you use /play <query> instead of providing a link it returns a playlist
         const isPlaylist = output._type === "playlist";
