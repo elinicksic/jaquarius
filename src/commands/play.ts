@@ -11,8 +11,8 @@ class Play extends Command {
     .setDescription("Plays a song from a link")
     .addStringOption((option) =>
       option
-        .setName("url")
-        .setDescription("The URL of the video you want to play")
+        .setName("url") // I couldn't change this without the queue breaking
+        .setDescription("The URL or Search Query of the video you want to play")
         .setRequired(true)
     ) as SlashCommandBuilder;
   execute(client: Bot, interaction: CommandInteraction): void {
@@ -46,13 +46,17 @@ class Play extends Command {
       dumpSingleJson: true,
       defaultSearch: "ytsearch",
     })
-      .then((output) => {
+      .then((output: any) => {
+        // When you use /play <query> instead of providing a link it returns a playlist
+        const playlist = output._type === "playlist" ? true : false;
+
+        // If it is a playlist it uses the first entry
         const song: Song = {
-          link: output.webpage_url,
+          link: playlist ? output.entries[0].webpage_url : output.webpage_url,
           user: interaction.user,
           addedTime: Date.now(),
-          length: output.duration,
-          title: output.title,
+          length: playlist ? output.entries[0].duration : output.duration,
+          title: playlist ? output.entries[0].title : output.title,
         };
 
         queue.queue.push(song);
@@ -61,10 +65,11 @@ class Play extends Command {
           queue.next();
         }
 
-        interaction.editReply(`Added ${output.title} to the queue!`);
+        interaction.editReply(`Added ${song.title} to the queue!`);
       })
-      .catch(() => {
+      .catch((e) => {
         interaction.editReply("I can only play links to YouTube videos!");
+        interaction.editReply(e.message);
       });
 
     interaction.deferReply();
