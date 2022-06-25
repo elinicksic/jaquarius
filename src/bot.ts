@@ -13,7 +13,6 @@ import {
   Snowflake,
   VoiceChannel,
 } from "discord.js";
-import "dotenv/config";
 import { readdirSync } from "fs";
 import path from "path";
 import Command from "./command";
@@ -27,6 +26,7 @@ import { QueueCommand } from "./commands/queue";
 import { SkipCommand } from "./commands/skip";
 import PlayNow from "./commands/playnow";
 import { Queue } from "./queue";
+import { LeaveCommand } from "./commands/leave";
 
 class Bot extends Client {
   public config = process.env;
@@ -83,6 +83,7 @@ class Bot extends Client {
     this.registerCommand(new LoopCommand());
     this.registerCommand(new LoopQueueCommand());
     this.registerCommand(new PlayNow());
+    this.registerCommand(new LeaveCommand());
 
     const commandRegister: unknown[] = [];
 
