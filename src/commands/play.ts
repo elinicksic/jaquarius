@@ -41,7 +41,19 @@ class Play extends Command {
       return;
     }
 
-    youtubedl(query, {
+    let newurl = query;
+
+    // support for alternative frontends that use "v" for the video ID in the url. eg: invidious and piped
+    if (!query.toLowerCase().includes("youtube.com")) {
+      try {
+        const url = new URL(query);
+        newurl = `https://youtube.com/watch?v=${url.searchParams.get("v")}`;
+      } catch {
+        newurl = query;
+      }
+    }
+
+    youtubedl(newurl, {
       skipDownload: true,
       dumpSingleJson: true,
       defaultSearch: "ytsearch",
