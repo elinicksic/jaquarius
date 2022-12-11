@@ -66,10 +66,6 @@ export class Queue {
         title: output.title,
       };
 
-      if (song.title.toLowerCase().includes("super idol")) {
-        return;
-      }
-
       this.queue.push(song);
     });
   }
